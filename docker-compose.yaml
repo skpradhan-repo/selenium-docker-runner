@@ -26,7 +26,7 @@ services:
       - HUB_HOST=35.225.240.37
       - MODULE=search-module.xml
     volumes:
-      - ./search-result:/usr/share/samsoft/test-output
+      - ./output/search-result:/usr/share/samsoft/test-output
     networks:
       - net
   book-flight-module:
@@ -38,7 +38,7 @@ services:
       - HUB_HOST=35.225.240.37
       - MODULE=book-flight-module.xml
     volumes:
-      - ./book-flight-result:/usr/share/samsoft/test-output
+      - ./output/book-flight-result:/usr/share/samsoft/test-output
     networks:
       - net
 networks:
