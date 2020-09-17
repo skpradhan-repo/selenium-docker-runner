@@ -2,7 +2,9 @@ pipeline{
 	agent any
 	stages{
 		stage("Delete Existing Project"){
-			sh "sudo rm -r /home/centos8/jenkins/workspace/selenium-docker-runner"
+			steps{
+				sh "sudo rm -r /home/centos8/jenkins/workspace/selenium-docker-runner"
+			}
 		}
 		stage("Pull Latest Image"){
 			steps{
