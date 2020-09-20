@@ -1,0 +1,38 @@
+version: "3"
+services:
+  hub:
+    image: dosel/zalenium
+    logging:
+      driver: "none"
+    ports:
+      - "4444:4444"
+      - "5555:5555"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /usr/bin/docker:/usr/bin/docker
+    command: >
+      start --desiredContainers 2 
+            --maxDockerSeleniumContainers 2 
+            --maxTestSessions 3 
+            --videoRecordingEnabled true
+  search-module:
+    image: samareshpro/selenium-docker:latest
+    depends_on:
+      - hub
+    environment:
+      - BROWSER=chrome
+      - HUB_HOST=hub
+      - MODULE=search-module.xml
+    volumes:
+      - ./output/search-result:/usr/share/samsoft/test-output
+  book-flight-module:
+    image: samareshpro/selenium-docker:latest
+    depends_on:
+      - hub
+    environment:
+      - BROWSER=firefox
+      - HUB_HOST=hub
+      - MODULE=book-flight-module.xml
+    volumes:
+      - ./output/book-flight-result:/usr/share/samsoft/test-output
+
