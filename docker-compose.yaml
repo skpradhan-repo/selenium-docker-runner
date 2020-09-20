@@ -1,46 +1,39 @@
 version: "3"
 services:
   hub:
-    image: dosel/zalenium
-    logging:
-      driver: "none"
-    ports:
-      - "4444:4444"
-      - "5555:5555"
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - /usr/bin/docker:/usr/bin/docker
-    command: >
-      start --desiredContainers 2 
-            --maxDockerSeleniumContainers 2 
-            --maxTestSessions 3 
-            --videoRecordingEnabled false
-    networks:
-      - net
-  search-module:
-    image: samareshpro/selenium-docker:latest
+    image: selenium/hub:3.14
+  chrome:
+    image: selenium/node-chrome:3.14      
     depends_on:
       - hub
     environment:
-      - BROWSER=chrome
-      - HUB_HOST=35.225.240.37
+      - HUB_HOST=hub
+  firefox:
+    image: selenium/node-firefox:3.14
+    shm_size: '1gb'   
+    depends_on:
+      - hub
+    environment:
+      - HUB_HOST=hub
+  search-module:
+    image: vinsdocker/selenium-docker
+    depends_on:
+      - chrome
+      - firefox
+    environment:
+      - HUB_HOST=hub
+      - BROWSER=firefox
       - MODULE=search-module.xml
     volumes:
-      - ./output/search-result:/usr/share/samsoft/test-output
-    networks:
-      - net
+      - ./output/search-result:/usr/share/udemy/test-output      
   book-flight-module:
-    image: samareshpro/selenium-docker:latest
+    image: vinsdocker/selenium-docker
     depends_on:
-      - hub
+      - chrome
+      - firefox
     environment:
-      - BROWSER=firefox
-      - HUB_HOST=35.225.240.37
+      - HUB_HOST=hub
+      - BROWSER=chrome
       - MODULE=book-flight-module.xml
     volumes:
-      - ./output/book-flight-result:/usr/share/samsoft/test-output
-    networks:
-      - net
-networks:
-  net:
-
+      - ./output/book-result:/usr/share/udemy/test-output   
