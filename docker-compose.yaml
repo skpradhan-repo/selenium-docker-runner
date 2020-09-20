@@ -16,24 +16,23 @@ services:
     environment:
       - HUB_HOST=hub
   search-module:
-    image: samareshpro/selenium-docker
+    image: samareshpro/selenium-docker:latest
     depends_on:
-      - chrome
-      - firefox
+      - hub
     environment:
+      - BROWSER=chrome
       - HUB_HOST=hub
-      - BROWSER=firefox
       - MODULE=search-module.xml
     volumes:
-      - ./output/search-result:/usr/share/samsoft/test-output      
+      - ./output/search-result:/usr/share/samsoft/test-output
+
   book-flight-module:
-    image: samareshpro/selenium-docker
+    image: samareshpro/selenium-docker:latest
     depends_on:
-      - chrome
-      - firefox
+      - hub
     environment:
+      - BROWSER=firefox
       - HUB_HOST=hub
-      - BROWSER=chrome
       - MODULE=book-flight-module.xml
     volumes:
-      - ./output/book-result:/usr/share/samsoft/test-output   
+      - ./output/book-flight-result:/usr/share/samsoft/test-output
